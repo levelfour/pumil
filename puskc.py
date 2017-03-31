@@ -7,17 +7,52 @@ import MI
 import numpy as np
 
 def train_pu_skc(data, args):
-  reg = 1.0e-03
-  bdim = len(data)
+  degs = [1, 2, 3]
+  regs = [1.0e+03, 1.0, 1.0e-03, 1.0e-06]
 
-  theta = MI.PU.class_prior(data, args)
-  basis = MI.kernel.minimax_basis(data, args.degree)
-  model = MI.PU.SKC.train(data, basis, bdim, theta, reg, args)
+  def train(data, deg, reg):
+    bdim = len(data)
+    theta = MI.PU.class_prior(data, degree = 1, reg = 1.0e+05)
+    basis = MI.kernel.minimax_basis(data, deg)
+    model = MI.PU.SKC.train(data, basis, bdim, theta, reg, args)
+    metadata = {'theta': theta, 'reg': reg, 'degree': deg}
+    return model, metadata
+
+  # cross validation
+  best_param = {}
+  best_error = np.inf
+  if args.verbose:
+    print("# *** Cross Validation ***")
+  for deg, reg in itertools.product(degs, regs):
+    try:
+      errors = []
+      for data_train, data_val in MI.cross_validation(data, 5):
+        clf, metadata = train(data_train, deg, reg)
+        e = MI.PU.prediction_error(data_val, clf, metadata['theta'])
+        errors.append(e)
+
+      error = np.mean(errors)
+
+      if args.verbose:
+        print("#  degree = {} / reg = {:.3e} : theta = {:.3e} / error = {:.3e}".format(deg, reg, metadata['theta'], error))
+
+      if error < best_error:
+        best_param = {'degree': deg, 'reg': reg}
+
+    except ValueError:
+      # sometimes fails for large degree
+      print("#  degree = {} / reg = {:.3e} : error = NaN".format(deg, reg))
 
   if args.verbose:
-    print("#  estimated class prior = {:.6f}".format(theta))
+    print("# {}".format('-'*80))
 
-  return model
+  # training using the best parameter
+  model, metadata = train(data, best_param['degree'], best_param['reg'])
+
+  if args.verbose:
+    print("#  estimated class prior = {:.6f}".format(metadata['theta']))
+
+  return model, best_param
 
 
 if __name__ == "__main__":
@@ -43,13 +78,6 @@ if __name__ == "__main__":
       metavar  = ['double_hinge', 'squared'],
       help     = 'loss function')
 
-  parser.add_argument('--degree',
-      action   = 'store',
-      default  = None,
-      type     = str,
-      metavar  = '[deg_lo|deg_hi|n_split]',
-      help     = 'polynomial kernel degree (only effective for minimax basis)')
-
   parser.add_argument('-v', '--verbose',
       action   = 'store_true',
       default  = False,
@@ -65,10 +93,11 @@ if __name__ == "__main__":
   print("# {}".format('-'*80))
   print("# *** Experimental Setting ***")
   print("#   model                     : PU-SKC (loss function = {})".format(args.loss))
-  print("#   basis                     : minimax (degree {})".format(args.degree))
-#  print("#   validation                : 5 fold cross validation")
+  print("#   basis                     : minimax")
+  print("#   validation                : 5 fold cross validation")
   print("# {}".format('-'*80))
 
   bags_train, bags_test, metadata = MI.datasets.load_dataset(args.dataset, args.prior)
-  clf = train_pu_skc(bags_train, args)
+  clf, best_param = train_pu_skc(bags_train, args)
+  print("#  degree = {} / reg = {:.3e}".format(best_param['degree'], best_param['reg']))
   MI.print_evaluation_result(clf, bags_test, args)

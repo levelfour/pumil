@@ -71,9 +71,9 @@ def _prepare(p_bags, n_bags, P, N, class_prior, L, U, T):
   return train, test, metadata
 
 
-def class_prior(data, args, r = 1.0e+05):
-  basis = MI.kernel.minimax_basis(data, 1)
-  return _class_prior(data, basis, r)
+def class_prior(data, degree, reg):
+  basis = MI.kernel.minimax_basis(data, degree)
+  return _class_prior(data, basis, reg)
 
 
 def _class_prior(bags, basis, r):
@@ -90,3 +90,4 @@ def _class_prior(bags, basis, r):
 
 
 from MI.PU import SKC
+from MI.PU.loss import prediction_error
