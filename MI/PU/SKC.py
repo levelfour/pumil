@@ -5,7 +5,7 @@ import MI
 import numpy as np
 
 
-_SOLVER = 'cvxopt'
+_SOLVER = 'gurobi'
 
 
 def train(bags, basis, bdim, theta, r, args):
@@ -48,6 +48,12 @@ def train_dh(bags, basis, bdim, theta, r, args):
     import warnings
     warnings.simplefilter(action = "ignore", category = FutureWarning)
 
+  elif _SOLVER == 'gurobi':
+    import sys
+    sys.path.append("/home/local/bin/gurobi650/linux64/lib/python3.4_utf32/gurobipy")
+    import gurobipy
+    from MI.gurobi_helper.helper import quadform, dot, mvmul
+
   p_bags = MI.extract_bags(bags, 1)
   u_bags = MI.extract_bags(bags, 0)
   N1 = len(p_bags)
@@ -81,6 +87,26 @@ def train_dh(bags, basis, bdim, theta, r, args):
     problem = QP(H + 1e-3 * np.eye(H.shape[0]), f, A = L, b = k)
     result  = problem.solve('qlcp')
     gamma = result.xf
+
+  elif _SOLVER == 'gurobi':
+    # model and target variables
+    m = gurobipy.Model('qp')
+    m.setParam('OutputFlag', False)
+    opt_dim = H.shape[0]
+    x = [m.addVar(lb = -gurobipy.GRB.INFINITY, name = 'x{}'.format(i)) for i in range(opt_dim)]
+    m.update()
+
+    # objective function and constraints
+    obj = 0.5 * quadform(H.tolist(), x) + dot(f.reshape(-1).tolist(), x)
+    constrs = [lhs <= rhs for lhs, rhs in zip(mvmul(L.tolist(), x), k)]
+
+    # solve
+    m.setObjective(obj)
+    for i, constr in enumerate(constrs):
+      m.addConstr(constr, 'c{}'.format(i))
+    m.optimize()
+
+    gamma = np.array([v.x for v in m.getVars()])
 
   alpha = gamma[:d]
   beta  = gamma[d]
