@@ -55,6 +55,15 @@ def train_pu_skc(data, args):
   return model, best_param
 
 
+DATASETS = [
+    'synth',
+    'musk1',
+    'musk2',
+    'fox',
+    'elephant',
+    'tiger',
+    ]
+
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description="PU-SKC experiment toolkit")
 
@@ -62,6 +71,7 @@ if __name__ == "__main__":
       action   = 'store',
       required = True,
       type     = str,
+      choices  = DATASETS,
       help     = 'multiple instance dataset')
 
   parser.add_argument('--prior',
