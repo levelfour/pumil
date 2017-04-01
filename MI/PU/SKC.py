@@ -104,9 +104,13 @@ def train_dh(bags, basis, bdim, theta, r, args):
     m.setObjective(obj)
     for i, constr in enumerate(constrs):
       m.addConstr(constr, 'c{}'.format(i))
-    m.optimize()
 
-    gamma = np.array([v.x for v in m.getVars()])
+    try:
+      m.optimize()
+      gamma = np.array([v.x for v in m.getVars()])
+
+    except gurobipy.GurobiError:
+      raise ValueError()
 
   alpha = gamma[:d]
   beta  = gamma[d]

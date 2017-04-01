@@ -8,7 +8,7 @@ import numpy as np
 
 def train_pu_skc(data, args):
   degs = [1, 2, 3]
-  regs = [1.0e+03, 1.0, 1.0e-03, 1.0e-06]
+  regs = [1.0, 1.0e-03, 1.0e-06]
 
   def train(data, deg, reg):
     bdim = len(data)
@@ -37,11 +37,13 @@ def train_pu_skc(data, args):
         print("#  degree = {} / reg = {:.3e} : theta = {:.3e} / error = {:.3e}".format(deg, reg, metadata['theta'], error))
 
       if error < best_error:
+        best_error = error
         best_param = {'degree': deg, 'reg': reg}
 
     except ValueError:
       # sometimes fails for large degree
-      print("#  degree = {} / reg = {:.3e} : error = NaN".format(deg, reg))
+      if args.verbose:
+        print("#  degree = {} / reg = {:.3e} : error = NaN".format(deg, reg))
 
   if args.verbose:
     print("# {}".format('-'*80))
