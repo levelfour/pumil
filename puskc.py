@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+import time
 import itertools
 import argparse
 import MI
@@ -10,12 +11,20 @@ def train_pu_skc(data, args):
   degs = [1, 2, 3]
   regs = [1.0, 1.0e-03, 1.0e-06]
 
-  def train(data, deg, reg):
+  def train(data, deg, reg, measure_time = False):
+    if measure_time:
+      t_start = time.time()
+
     bdim = len(data)
     theta = MI.PU.class_prior(data, degree = 1, reg = 1.0e+05)
     basis = MI.kernel.minimax_basis(data, deg)
     model = MI.PU.SKC.train(data, basis, bdim, theta, reg, args)
     metadata = {'theta': theta, 'reg': reg, 'degree': deg}
+
+    if measure_time:
+      t_end = time.time()
+      print("#  elapsed time = {}".format(t_end - t_start))
+
     return model, metadata
 
   # cross validation
@@ -49,7 +58,7 @@ def train_pu_skc(data, args):
     print("# {}".format('-'*80))
 
   # training using the best parameter
-  model, metadata = train(data, best_param['degree'], best_param['reg'])
+  model, metadata = train(data, best_param['degree'], best_param['reg'], measure_time = True)
 
   if args.verbose:
     print("#  estimated class prior = {:.6f}".format(metadata['theta']))

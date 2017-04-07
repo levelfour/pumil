@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+import time
 import random
 import itertools
 import argparse
@@ -211,9 +212,14 @@ if __name__ == "__main__":
 
   # load data (dimension reduced to [pca_dim] for WKDE to work well)
   bags_train, bags_test, metadata = MI.datasets.load_dataset(args.dataset, args.prior, dim = pca_dim)
+
+  t_start = time.time()
   clf = pumil(
       bags_train,
       metadata['train_lp'],
       metadata['train_up'] + metadata['train_un'],
       args)
+  t_end = time.time()
+  print("#  elapsed time = {}".format(t_end - t_start))
+
   MI.print_evaluation_result(clf, bags_test, args)
