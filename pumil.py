@@ -102,10 +102,10 @@ def train_pumil_clf(bags, pidx, uidx, w, NL, learning_phase = False):
 
 
 def pumil(bags, NL, NU, args):
-  L = 10       # the number of confidence vectors
+  L = 100      # the number of confidence vectors
   c = 0.1      # clone factor
-  T = 1.0e-03  # threshold (eps)
-  M = 100      # max iteration limit
+  T = 1.0e-08  # threshold (eps)
+  M = 1e+10    # max iteration limit
 
   # list of indices
   pidx = [i for i, B in enumerate(bags) if B.label() == 1]
