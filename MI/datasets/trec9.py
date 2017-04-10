@@ -56,6 +56,8 @@ def dump_trec9(data_file, bags):
     for bag_id, bag in enumerate(bags):
       for inst in bag.instances:
         f.write("{}:{}:{} ".format(total_id, bag_id, inst['label']))
-        f.write(" ".join(["{}:{}".format(i, v) for i, v in enumerate(inst['data'])]))
+        for i, v in enumerate(inst['data']):
+          if v != 0:
+            f.write("{}:{} ".format(i, v))
         f.write("\n")
         total_id += 1

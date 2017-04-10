@@ -14,6 +14,13 @@ DATASET:
  elephant       Corel Image Set (Elephant)
  fox            Corel Image Set (Fox)
  tiger          Corel Image Set (Tiger)
+ tst1           TREC9 / 1
+ tst2           TREC9 / 2
+ tst3           TREC9 / 3
+ tst4           TREC9 / 4
+ tst7           TREC9 / 7
+ tst9           TREC9 / 9
+ tst10          TREC9 / 10
 -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 EOF
 exit -1
@@ -35,6 +42,20 @@ dl_trec9() {
       mv MilData/Musk/musk1norm.svm        musk1.data
     elif [ "$1" = "musk2" ]; then
       mv MilData/Musk/musk2norm.svm        musk2.data
+    elif [ "$1" = "tst1" ]; then
+      mv MilData/1/data_200x200.svm        tst1.data
+    elif [ "$1" = "tst2" ]; then
+      mv MilData/2/data_200x200.svm        tst2.data
+    elif [ "$1" = "tst3" ]; then
+      mv MilData/3/data_200x200.svm        tst3.data
+    elif [ "$1" = "tst4" ]; then
+      mv MilData/4/data_200x200.svm        tst4.data
+    elif [ "$1" = "tst7" ]; then
+      mv MilData/7/data_200x200.svm        tst7.data
+    elif [ "$1" = "tst9" ]; then
+      mv MilData/9/data_200x200.svm        tst9.data
+    elif [ "$1" = "tst10" ]; then
+      mv MilData/10/data_200x200.svm       tst10.data
     fi
 }
 
@@ -53,6 +74,20 @@ fox)
     dl_trec9 fox;;
 tiger)
     dl_trec9 tiger;;
+tst1)
+    dl_trec9 tst1;;
+tst2)
+    dl_trec9 tst2;;
+tst3)
+    dl_trec9 tst3;;
+tst4)
+    dl_trec9 tst4;;
+tst7)
+    dl_trec9 tst7;;
+tst9)
+    dl_trec9 tst9;;
+tst10)
+    dl_trec9 tst10;;
 --help | -h)
     usage;;
 *)
