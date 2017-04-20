@@ -1,4 +1,4 @@
-# A Convex Formulation for Multiple Instance Learning from Positive and Unlabeled Data
+# Risk Minimization Framework for Multiple Instance Learning from Positive and Unlabeled Bags
 
 ## Environment
 
