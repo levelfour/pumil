@@ -31,7 +31,7 @@ class Bag(object):
     m = np.max(list(map(lambda x: x['data'], self.instances)), axis=0)
     for i in range(len(self.instances)):
       z = np.random.normal(0, 0.01, m.shape[0])
-      w = np.apply_along_axis(lambda x: 0 if x == 0 else 1, 0, self.instances[i]['data'])
+      w = np.apply_along_axis(lambda x: 0 if x[0] == 0 else 1, 0, self.instances[i]['data'])
       self.instances[i]['data'] += m * z * w
 
   def pca_reduction(self, pca):

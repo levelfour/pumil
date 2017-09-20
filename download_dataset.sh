@@ -33,29 +33,29 @@ dl_trec9() {
     fi
 
     if [ "$1" = "elephant" ]; then
-      mv MilData/Elephant/data_100x100.svm elephant.data
+      cp MilData/Elephant/data_100x100.svm elephant.data
     elif [ "$1" = "fox" ]; then
-      mv MilData/Fox/data_100x100.svm      fox.data
+      cp MilData/Fox/data_100x100.svm      fox.data
     elif [ "$1" = "tiger" ]; then
-      mv MilData/Tiger/data_100x100.svm    tiger.data
+      cp MilData/Tiger/data_100x100.svm    tiger.data
     elif [ "$1" = "musk1" ]; then
-      mv MilData/Musk/musk1norm.svm        musk1.data
+      cp MilData/Musk/musk1norm.svm        musk1.data
     elif [ "$1" = "musk2" ]; then
-      mv MilData/Musk/musk2norm.svm        musk2.data
+      cp MilData/Musk/musk2norm.svm        musk2.data
     elif [ "$1" = "tst1" ]; then
-      mv MilData/1/data_200x200.svm        tst1.data
+      cp MilData/1/data_200x200.svm        tst1.data
     elif [ "$1" = "tst2" ]; then
-      mv MilData/2/data_200x200.svm        tst2.data
+      cp MilData/2/data_200x200.svm        tst2.data
     elif [ "$1" = "tst3" ]; then
-      mv MilData/3/data_200x200.svm        tst3.data
+      cp MilData/3/data_200x200.svm        tst3.data
     elif [ "$1" = "tst4" ]; then
-      mv MilData/4/data_200x200.svm        tst4.data
+      cp MilData/4/data_200x200.svm        tst4.data
     elif [ "$1" = "tst7" ]; then
-      mv MilData/7/data_200x200.svm        tst7.data
+      cp MilData/7/data_200x200.svm        tst7.data
     elif [ "$1" = "tst9" ]; then
-      mv MilData/9/data_200x200.svm        tst9.data
+      cp MilData/9/data_200x200.svm        tst9.data
     elif [ "$1" = "tst10" ]; then
-      mv MilData/10/data_200x200.svm       tst10.data
+      cp MilData/10/data_200x200.svm       tst10.data
     fi
 }
 
