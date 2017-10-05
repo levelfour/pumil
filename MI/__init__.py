@@ -113,5 +113,6 @@ def print_evaluation_result(clf, bags_test, args):
 
 
 from MI import PU
+from MI import UU
 from MI import kernel
 from MI import datasets
