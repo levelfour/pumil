@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DATASET="musk2"
-N=50
+N=20
 
 experiment () {
     prior=$1
@@ -14,5 +14,9 @@ experiment () {
 }
 
 experiment 0.1
+experiment 0.2
+experiment 0.3
 experiment 0.4
+experiment 0.5
+experiment 0.6
 experiment 0.7
