@@ -6,7 +6,8 @@ def r(x):
 
 def LSDD(P, Q, s, l):
   X = np.vstack((P, Q))
-  H = np.exp(- (r(X**2) - 2*X.dot(X.T) + r(X**2).T) / (2*s**2))
+  d = X.shape[1]
+  H = (np.pi * s**2)**(d/2) * np.exp(- (r(X**2) - 2*X.dot(X.T) + r(X**2).T) / (4*s**2))
   h = np.exp(- (r(X**2) - 2*X.dot(P.T) + r(P**2).T) / (2*s**2)).mean(axis=1) \
     - np.exp(- (r(X**2) - 2*X.dot(Q.T) + r(Q**2).T) / (2*s**2)).mean(axis=1)
   t = np.linalg.solve(H + l * np.eye(H.shape[0]), h)
