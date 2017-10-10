@@ -24,9 +24,36 @@ def train_lsdd(data, args):
 
     return model, metadata
 
-  model, metadata = train(data, 1.0e-2, 1.0e-2, measure_time=True)
+  # cross validation
+  best_param = {}
+  best_error = np.inf
+  if args.verbose:
+    print("# *** Cross Validation ***")
+  for width, reg in itertools.product(widths, regs):
+    errors = []
+    for data_train, data_val in MI.cross_validation(data, 5):
+      t = MI.UU.LSDD.LSDD(
+          np.vstack(MI.extract_bags(data_train, 1)),
+          np.vstack(MI.extract_bags(data_train, 0)),
+          width, reg)
+      e = MI.UU.LSDD.validation_error(data_val, data_train, width, reg, t)
+      errors.append(e)
 
-  return model
+    error = np.mean(errors)
+
+    if args.verbose:
+      print("#  width = {:.3e} / reg = {:.3e} / error = {:.3e}".format(width, reg, error))
+
+    if error < best_error:
+      best_error = error
+      best_param = {'width': width, 'reg': reg}
+
+  if args.verbose:
+    print("# {}".format('-'*80))
+
+  model, metadata = train(data, best_param['width'], best_param['reg'], measure_time=True)
+
+  return model, best_param
 
 
 DATASETS = [
@@ -73,5 +100,6 @@ if __name__ == "__main__":
   print("# {}".format('-'*80))
 
   bags_train, bags_test, metadata = MI.datasets.load_dataset(args.dataset, args.prior)
-  clf = train_lsdd(bags_train, args)
+  clf, best_param = train_lsdd(bags_train, args)
+  print("#  width = {:.3e} / reg = {:.3e}".format(best_param['width'], best_param['reg']))
   MI.print_evaluation_result(clf, bags_test, args)
