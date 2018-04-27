@@ -12,7 +12,7 @@ import copy
 import numpy as np
 
 
-def load_dataset(dataset, cprior, dim = None):
+def load_dataset(dataset, cprior, nu, dim = None):
   if dataset == 'musk1':
     bags = load_trec9('datasets/musk1.data', 166, 92*10)
 
@@ -21,7 +21,7 @@ def load_dataset(dataset, cprior, dim = None):
 
     bags_train, bags_test, metadata = PU.prepare(
         bags, cprior,
-        L = 20, U = 180, T = 200)
+        L = 20, U = nu, T = 200)
 
   elif dataset == 'musk2':
     bags = load_trec9('datasets/musk2.data', 166, 102*10)
@@ -31,7 +31,7 @@ def load_dataset(dataset, cprior, dim = None):
 
     bags_train, bags_test, metadata = PU.prepare(
         bags, cprior,
-        L = 20, U = 180, T = 200)
+        L = 20, U = nu, T = 200)
 
   elif dataset == 'elephant':
     bags = load_trec9('datasets/elephant.data', 230, 200*5)
@@ -41,7 +41,7 @@ def load_dataset(dataset, cprior, dim = None):
 
     bags_train, bags_test, metadata = PU.prepare(
         bags, cprior,
-        L = 20, U = 180, T = 200)
+        L = 20, U = nu, T = 200)
 
   elif dataset == 'fox':
     bags = load_trec9('datasets/fox.data', 230, 200*5)
@@ -51,7 +51,7 @@ def load_dataset(dataset, cprior, dim = None):
 
     bags_train, bags_test, metadata = PU.prepare(
         bags, cprior,
-        L = 20, U = 180, T = 200)
+        L = 20, U = nu, T = 200)
 
   elif dataset == 'tiger':
     bags = load_trec9('datasets/tiger.data', 230, 200*5)
@@ -61,11 +61,11 @@ def load_dataset(dataset, cprior, dim = None):
 
     bags_train, bags_test, metadata = PU.prepare(
         bags, cprior,
-        L = 20, U = 180, T = 200)
+        L = 20, U = nu, T = 200)
 
   elif dataset == 'synth':
     bags_train, bags_test, metadata = synthesize(
-        L = 20, U = 180, T = 200,
+        L = 20, U = nu, T = 200,
         theta = cprior,
         eta = 0.2,  # the percentage of positive instances in a positive bag
         n = 4)
