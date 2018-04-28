@@ -55,6 +55,18 @@ if __name__ == "__main__":
       metavar  = '[0-1]',
       help     = 'class prior (the ratio of positive data)')
 
+  parser.add_argument('--np',
+      action   = 'store',
+      default  = 20,
+      type     = int,
+      help     = 'the number of positive data')
+
+  parser.add_argument('--nu',
+      action   = 'store',
+      default  = 180,
+      type     = int,
+      help     = 'the number of unlabeled data')
+
   parser.add_argument('-v', '--verbose',
       action   = 'store_true',
       default  = False,
@@ -72,6 +84,6 @@ if __name__ == "__main__":
   print("#   model                     : DSDD")
   print("# {}".format('-'*80))
 
-  bags_train, bags_test, metadata = MI.datasets.load_dataset(args.dataset, args.prior)
+  bags_train, bags_test, metadata = MI.datasets.load_dataset(args.dataset, args.prior, args.np, args.nu)
   clf = train_lsdd(bags_train, args)
   MI.print_evaluation_result(clf, bags_test, args)

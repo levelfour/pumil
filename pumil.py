@@ -190,6 +190,18 @@ if __name__ == "__main__":
       metavar  = '[0-1]',
       help     = 'class prior (the ratio of positive data)')
 
+  parser.add_argument('--np',
+      action   = 'store',
+      default  = 20,
+      type     = int,
+      help     = 'the number of positive data')
+
+  parser.add_argument('--nu',
+      action   = 'store',
+      default  = 180,
+      type     = int,
+      help     = 'the number of unlabeled data')
+
   parser.add_argument('-v', '--verbose',
       action   = 'store_true',
       default  = False,
@@ -211,7 +223,7 @@ if __name__ == "__main__":
     print("# {}".format('-'*80))
 
   # load data (dimension reduced to [pca_dim] for WKDE to work well)
-  bags_train, bags_test, metadata = MI.datasets.load_dataset(args.dataset, args.prior, dim = pca_dim)
+  bags_train, bags_test, metadata = MI.datasets.load_dataset(args.dataset, args.prior, args.np, args.nu, dim = pca_dim)
 
   t_start = time.time()
   clf = pumil(
