@@ -15,7 +15,6 @@ import numpy as np
 def load_dataset(dataset, cprior, np, nu, dim = None):
   if dataset == 'musk1':
     bags = load_trec9('datasets/musk1.data', 166, 92*10)
-    bags = augment(bags, 2)
 
     if dim is not None:
       bags = diminish(bags, dim)
@@ -35,8 +34,7 @@ def load_dataset(dataset, cprior, np, nu, dim = None):
         L = np, U = nu, T = 200)
 
   elif dataset == 'elephant':
-    bags = load_trec9('datasets/elephant.data', 230, 200*5)
-    bags = augment(bags, 2)
+    bags = load_trec9('datasets/elephant_10x.data', 230, 200*10)
 
     if dim is not None:
       bags = diminish(bags, dim)
@@ -46,7 +44,7 @@ def load_dataset(dataset, cprior, np, nu, dim = None):
         L = np, U = nu, T = 200)
 
   elif dataset == 'fox':
-    bags = load_trec9('datasets/fox.data', 230, 200*5)
+    bags = load_trec9('datasets/fox_10x.data', 230, 200*10)
 
     if dim is not None:
       bags = diminish(bags, dim)
@@ -56,7 +54,7 @@ def load_dataset(dataset, cprior, np, nu, dim = None):
         L = np, U = nu, T = 200)
 
   elif dataset == 'tiger':
-    bags = load_trec9('datasets/tiger.data', 230, 200*5)
+    bags = load_trec9('datasets/tiger_10x.data', 230, 200*10)
 
     if dim is not None:
       bags = diminish(bags, dim)
