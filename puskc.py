@@ -99,7 +99,13 @@ if __name__ == "__main__":
       metavar  = ['double_hinge', 'squared'],
       help     = 'loss function')
 
-  parser.add_argument('-n',
+  parser.add_argument('--np',
+      action   = 'store',
+      default  = 20,
+      type     = int,
+      help     = 'the number of positive data')
+
+  parser.add_argument('--nu',
       action   = 'store',
       default  = 180,
       type     = int,
@@ -124,7 +130,7 @@ if __name__ == "__main__":
   print("#   validation                : 5 fold cross validation")
   print("# {}".format('-'*80))
 
-  bags_train, bags_test, metadata = MI.datasets.load_dataset(args.dataset, args.prior, args.n)
+  bags_train, bags_test, metadata = MI.datasets.load_dataset(args.dataset, args.prior, args.np, args.nu)
   clf, best_param = train_pu_skc(bags_train, args)
   print("#  degree = {} / reg = {:.3e}".format(best_param['degree'], best_param['reg']))
   MI.print_evaluation_result(clf, bags_test, args)
